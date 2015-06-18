@@ -1,0 +1,305 @@
+﻿@{
+    ViewBag.Title = "UK WEATHER!";
+}
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+           
+        </div>
+    </section>
+}
+<html>
+    <head>
+        <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2.min.js"></script>
+        <script src="http://livestax.com/assets/livestax-0.1.0.js"></script>
+        <!--jQuery, linked from a CDN-->
+   <script src="scripts.js"></script>
+   <script type="text/javascript" src="http://use.typekit.com/oya4cmx.js"></script>
+    </head>
+    <body>
+        
+<table>
+    <tr>
+        <td>
+           
+            <input id="Text1" type="text" style="width:300px"/>
+            <input id="Submit1" type="submit" value="Daily" />
+            
+            <input id="Submit2" type="submit" value="Weekly" />
+
+        </td>
+        
+
+    </tr>
+    
+    <tr>
+
+        <td style="width:1000px"><b>City Name</b></td>
+    </tr>
+
+    <tr>
+        <td>
+            <div id="WeatherWkButton"  hidden="hidden">
+
+                <input id="Button1" type="button" value="Day 1" />
+                <input id="Button2" type="button" value="Day 2" />
+                <input id="Button3" type="button" value="Day 3" />
+                <input id="Button4" type="button" value="Day 4" />
+                <input id="Button5" type="button" value="Day 5" />
+                <input id="Button6" type="button" value="Day 6" />
+                <input id="Button7" type="button" value="Day 7" />
+                </div>
+        </td>
+
+    </tr>
+    
+</table>
+       @* <section id="WeatherDaily">
+        </section>*@
+        <div id="WeatherDaily" hidden="hidden">
+            </div>
+
+        <div id="WeatherDay1" hidden="hidden"></div>
+         <div id="WeatherDay2" hidden="hidden"></div>
+         <div id="WeatherDay3" hidden="hidden"></div>
+        <div id="WeatherDay4" hidden="hidden"></div>
+         <div id="WeatherDay5" hidden="hidden"></div>
+        <div id="WeatherDay6" hidden="hidden"></div>
+         <div id="WeatherDay7" hidden="hidden"></div>
+       
+        </body>
+    </html>
+
+<script>
+
+    $("#Submit1").click(function () {
+
+       
+        var City = $('#Text1').val();
+       
+        $('#WeatherWkButton').hide();
+
+        $('#WeatherDay1').hide();
+        $('#WeatherDay2').hide();
+        $('#WeatherDay3').hide();
+        $('#WeatherDay4').hide();
+        $('#WeatherDay5').hide();
+        $('#WeatherDay6').hide();
+        $('#WeatherDay7').hide();
+
+        $('#WeatherDaily').show();
+
+        $.getJSON("http://api.openweathermap.org/data/2.5/weather?q=" + City + ",uk", function (json) {
+            if (json != "Nothing found.") {
+                
+                var num = 273.15;
+                var temp = json.main.temp.toFixed(2);
+                var TempCel = (temp - 273.15).toFixed(1);
+
+                var tempmin = json.main.temp_min.toFixed(2);
+                var tempminCel = (tempmin - 273.15).toFixed(1);
+
+                var tempmax = json.main.temp_max.toFixed(2);
+                var tempmaxCel = (tempmax - 273.15).toFixed(1);
+                $('#WeatherDaily').html('<p><img src="http://openweathermap.org/img/w/' + json.weather[0].icon + '.png"/> ' + City + ',UK <b>' + json.weather[0].description + '</b></br><b>' + TempCel + ' &#8451 </b> temperature from ' + tempminCel + ' to ' + tempmaxCel + ' &#8451 ,Wind ' + json.wind.speed + 'm/s. clouds '+ json.clouds.all + '%</p>');
+            }
+
+        });
+    }
+    );
+
+    $("#Submit2").click(function () {
+
+        
+        var City = $('#Text1').val();
+
+        $('#WeatherWkButton').show();
+
+        $('#WeatherDaily').hide();
+
+        $.getJSON("http://api.openweathermap.org/data/2.5/forecast/daily?q=" + City + ",uk", function (json) {
+            if (json != "Nothing found.") {
+               
+                var num = 273.15;
+                var temp = json.list[0].temp.day.toFixed(2);
+                var TempCel = (temp - 273.15).toFixed(1);
+
+                var tempmin = json.list[0].temp.min.toFixed(2);
+                var tempminCel = (tempmin - 273.15).toFixed(1);
+
+                var tempmax = json.list[0].temp.max.toFixed(2);
+                var tempmaxCel = (tempmax - 273.15).toFixed(1);
+                $('#WeatherDay1').html('<p><b>Day 1</b><img src="http://openweathermap.org/img/w/' + json.list[0].weather[0].icon + '.png"/> ' + City + ',UK <b>' + json.list[0].weather[0].description + '</b></br><b>' + TempCel + ' &#8451 </b> temperature from ' + tempminCel + ' to ' + tempmaxCel + ' &#8451 ,Wind ' + json.list[0].speed + 'm/s. clouds ' + json.list[0].clouds + '%</p>');
+
+               
+                num = 273.15;
+                temp = json.list[1].temp.day.toFixed(2);
+                TempCel = (temp - 273.15).toFixed(1);
+
+                tempmin = json.list[1].temp.min.toFixed(2);
+                tempminCel = (tempmin - 273.15).toFixed(1);
+
+                tempmax = json.list[1].temp.max.toFixed(2);
+                tempmaxCel = (tempmax - 273.15).toFixed(1);
+                $('#WeatherDay2').html('<p><b>Day 2</b><img src="http://openweathermap.org/img/w/' + json.list[1].weather[0].icon + '.png"/> ' + City + ',UK <b>' + json.list[1].weather[0].description + '</b></br><b>' + TempCel + ' &#8451 </b> temperature from ' + tempminCel + ' to ' + tempmaxCel + ' &#8451 ,Wind ' + json.list[1].speed + 'm/s. clouds ' + json.list[1].clouds + '%</p>');
+
+
+                
+                num = 273.15;
+                temp = json.list[2].temp.day.toFixed(2);
+                TempCel = (temp - 273.15).toFixed(1);
+
+                tempmin = json.list[2].temp.min.toFixed(2);
+                tempminCel = (tempmin - 273.15).toFixed(1);
+
+                tempmax = json.list[2].temp.max.toFixed(2);
+                tempmaxCel = (tempmax - 273.15).toFixed(1);
+                $('#WeatherDay3').html('<p><b>Day 3</b><img src="http://openweathermap.org/img/w/' + json.list[2].weather[0].icon + '.png"/> ' + City + ',UK <b>' + json.list[2].weather[0].description + '</b></br><b>' + TempCel + ' &#8451 </b> temperature from ' + tempminCel + ' to ' + tempmaxCel + ' &#8451 ,Wind ' + json.list[2].speed + 'm/s. clouds ' + json.list[2].clouds + '%</p>');
+
+                
+                num = 273.15;
+                temp = json.list[3].temp.day.toFixed(2);
+                TempCel = (temp - 273.15).toFixed(1);
+
+                tempmin = json.list[3].temp.min.toFixed(2);
+                tempminCel = (tempmin - 273.15).toFixed(1);
+
+                tempmax = json.list[3].temp.max.toFixed(2);
+                tempmaxCel = (tempmax - 273.15).toFixed(1);
+                $('#WeatherDay4').html('<p><b>Day 4</b><img src="http://openweathermap.org/img/w/' + json.list[3].weather[0].icon + '.png"/> ' + City + ',UK <b>' + json.list[3].weather[0].description + '</b></br><b>' + TempCel + ' &#8451 </b> temperature from ' + tempminCel + ' to ' + tempmaxCel + ' &#8451 ,Wind ' + json.list[3].speed + 'm/s. clouds ' + json.list[3].clouds + '%</p>');
+
+                
+                num = 273.15;
+                temp = json.list[4].temp.day.toFixed(2);
+                TempCel = (temp - 273.15).toFixed(1);
+
+                tempmin = json.list[4].temp.min.toFixed(2);
+                tempminCel = (tempmin - 273.15).toFixed(1);
+
+                tempmax = json.list[4].temp.max.toFixed(2);
+                tempmaxCel = (tempmax - 273.15).toFixed(1);
+                $('#WeatherDay5').html('<p><b>Day 5</b><img src="http://openweathermap.org/img/w/' + json.list[4].weather[0].icon + '.png"/> ' + City + ',UK <b>' + json.list[4].weather[0].description + '</b></br><b>' + TempCel + ' &#8451 </b> temperature from ' + tempminCel + ' to ' + tempmaxCel + ' &#8451 ,Wind ' + json.list[4].speed + 'm/s. clouds ' + json.list[4].clouds + '%</p>');
+
+                
+                num = 273.15;
+                temp = json.list[5].temp.day.toFixed(2);
+                TempCel = (temp - 273.15).toFixed(1);
+
+                tempmin = json.list[5].temp.min.toFixed(2);
+                tempminCel = (tempmin - 273.15).toFixed(1);
+
+                tempmax = json.list[5].temp.max.toFixed(2);
+                tempmaxCel = (tempmax - 273.15).toFixed(1);
+                $('#WeatherDay6').html('<p><b>Day 6</b><img src="http://openweathermap.org/img/w/' + json.list[5].weather[0].icon + '.png"/> ' + City + ',UK <b>' + json.list[5].weather[0].description + '</b></br><b>' + TempCel + ' &#8451 </b> temperature from ' + tempminCel + ' to ' + tempmaxCel + ' &#8451 ,Wind ' + json.list[5].speed + 'm/s. clouds ' + json.list[5].clouds + '%</p>');
+
+                
+                num = 273.15;
+                temp = json.list[6].temp.day.toFixed(2);
+                TempCel = (temp - 273.15).toFixed(1);
+
+                tempmin = json.list[6].temp.min.toFixed(2);
+                tempminCel = (tempmin - 273.15).toFixed(1);
+
+                tempmax = json.list[6].temp.max.toFixed(2);
+                tempmaxCel = (tempmax - 273.15).toFixed(1);
+                $('#WeatherDay7').html('<p><b>Day 7</b><img src="http://openweathermap.org/img/w/' + json.list[6].weather[0].icon + '.png"/> ' + City + ',UK <b>' + json.list[6].weather[0].description + '</b></br><b>' + TempCel + ' &#8451 </b> temperature from ' + tempminCel + ' to ' + tempmaxCel + ' &#8451 ,Wind ' + json.list[6].speed + 'm/s. clouds ' + json.list[6].clouds + '%</p>');
+            }
+
+        });
+    }
+    );
+
+    $("#Button1").click(function () {
+        
+        $('#WeatherDay1').show();
+
+        $('#WeatherDay2').hide();
+        $('#WeatherDay3').hide();
+        $('#WeatherDay4').hide();
+        $('#WeatherDay5').hide();
+        $('#WeatherDay6').hide();
+        $('#WeatherDay7').hide();
+    }
+    );
+
+    $("#Button2").click(function () {
+
+        $('#WeatherDay2').show();
+
+        $('#WeatherDay1').hide();
+        $('#WeatherDay3').hide();
+        $('#WeatherDay4').hide();
+        $('#WeatherDay5').hide();
+        $('#WeatherDay6').hide();
+        $('#WeatherDay7').hide();
+    }
+    );
+
+    $("#Button3").click(function () {
+        
+        $('#WeatherDay3').show();
+
+        $('#WeatherDay1').hide();
+        $('#WeatherDay2').hide();
+        $('#WeatherDay4').hide();
+        $('#WeatherDay5').hide();
+        $('#WeatherDay6').hide();
+        $('#WeatherDay7').hide();
+    }
+   );
+
+    $("#Button4").click(function () {
+
+        $('#WeatherDay4').show();
+
+        $('#WeatherDay2').hide();
+        $('#WeatherDay3').hide();
+        $('#WeatherDay1').hide();
+        $('#WeatherDay5').hide();
+        $('#WeatherDay6').hide();
+        $('#WeatherDay7').hide();
+    }
+    );
+
+    $("#Button5").click(function () {
+        
+        $('#WeatherDay5').show();
+
+        $('#WeatherDay2').hide();
+        $('#WeatherDay3').hide();
+        $('#WeatherDay4').hide();
+        $('#WeatherDay1').hide();
+        $('#WeatherDay6').hide();
+        $('#WeatherDay7').hide();
+    }
+   );
+
+    $("#Button6").click(function () {
+
+        $('#WeatherDay6').show();
+
+        $('#WeatherDay2').hide();
+        $('#WeatherDay3').hide();
+        $('#WeatherDay4').hide();
+        $('#WeatherDay5').hide();
+        $('#WeatherDay1').hide();
+        $('#WeatherDay7').hide();
+    }
+    );
+    $("#Button7").click(function () {
+
+        $('#WeatherDay7').show();
+
+        $('#WeatherDay2').hide();
+        $('#WeatherDay3').hide();
+        $('#WeatherDay4').hide();
+        $('#WeatherDay5').hide();
+        $('#WeatherDay1').hide();
+        $('#WeatherDay6').hide();
+    }
+   );
+</script>
